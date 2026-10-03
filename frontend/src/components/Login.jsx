@@ -18,14 +18,10 @@ const Login = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      const { data } = await http.post("/api/user/login", values);
-      const {role}=data;
-      if(role ==="admin"){
-      return toast.success("Admin tried to login");
-      }
-      if(role ==="user"){
-      return navigate("/app/user/dashboard");
-      }
+      console.log("SENDING REQUEST", values);
+      const { data } = await http.post("/api/auth/login", values);
+      console.log("RESPONSE", data);
+      return toast.success("Login successful");
     } catch (err) {
       toast.error(err.response ? err.response.data.message : err.message);
     } finally {
