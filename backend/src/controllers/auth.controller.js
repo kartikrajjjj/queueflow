@@ -41,7 +41,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.ENVIRONMENT !== "DEV",
       sameSite: process.env.ENVIRONMENT === "DEV" ? "lax" : "none",
-      path: "/login",
+      path: "/",
       domain: undefined,
       maxAge: 86400000,
     });
