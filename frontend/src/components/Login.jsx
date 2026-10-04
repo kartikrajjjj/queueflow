@@ -21,7 +21,9 @@ const Login = () => {
       console.log("SENDING REQUEST", values);
       const { data } = await http.post("/api/auth/login", values);
       console.log("RESPONSE", data);
-      return toast.success("Login successful");
+        toast.success("Login successful");
+        return navigate("/app/user/dashboard");
+      
     } catch (err) {
       toast.error(err.response ? err.response.data.message : err.message);
     } finally {

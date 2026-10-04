@@ -1,6 +1,9 @@
 import UserModel from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { generateOTP } from "../../../frontend/src/utils/generateOTP.js";
+import { sendMail } from "../../../frontend/src/utils/mail.js";
+import { otpTemplate } from "../../../frontend/src/utils/otp.template.js";
 
 const createToken = async (user)=>{
     const payload = {
@@ -18,7 +21,7 @@ const createToken = async (user)=>{
 export const signUp = async (req, res) => {
   try {
     const data = req.body;
-    const user = UserModel(data);
+    const user = new UserModel(data);
     await user.save();
     const userObject = user.toObject();
     delete userObject.password;
@@ -48,5 +51,38 @@ export const login = async (req, res) => {
     res.json({ message: "Login successful" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+export const sendEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const OTP = generateOTP();
+    const isEmail = await UserModel.findOne({ email });
+    if (isEmail) {
+      return res
+        .status(400)
+        .json({ message: "This email is already registered" });
+    }
+
+    const sent = await sendMail(email, "OTP for signup", otpTemplate(OTP));
+
+    if (!sent) {
+      return res.status(500).json({
+        message: "Email failed to send",
+        success: false,
+      });
+    }
+
+    res.json({
+      message: "Email sent successfully",
+      otp: OTP,
+      success: true,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
   }
 };
