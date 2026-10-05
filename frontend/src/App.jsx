@@ -4,7 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Guard from "./Guard/index.jsx";
 import Userlayout from "./components/Userlayout/index.jsx";
 import Dashboard from "./components/Dashboard.jsx";
-
+import OwnerSignup from "./components/Owner/owner.signup.jsx";
+import OwnerLogin from "./components/Owner/owner.login.jsx";
 
 import Signup from "./components/Signup.jsx";
 import HomePage from "./components/HomePage.jsx";
@@ -12,9 +13,12 @@ import HomePage from "./components/HomePage.jsx";
 function App() {
   return (
     <BrowserRouter>
-    <Routes>
+      <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/signup" element ={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/ownersignup" element={<OwnerSignup />} />
+
+        <Route path="/ownerlogin" element={<OwnerLogin />} />
 
         <Route
           path="/app/user"
@@ -25,14 +29,12 @@ function App() {
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
-          {/*commented coz elements are not yet built <Route index element={<Type />} /> */}
-          {/* <Route path="owner" element={<Owner />} />
-          <Route path="staff" element={<Staff />} /> */}
+          <Route path="owner" element={<OwnerSignup />} />
+          <Route path="staff" element={<Dashboard />} />
         </Route>
-    </Routes>
-    <ToastContainer />
+      </Routes>
+      <ToastContainer />
     </BrowserRouter>
-    
-  )
+  );
 }
-export default App
+export default App;

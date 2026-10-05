@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRouter from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import ownerRouter from "./owner/owner.routes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(cors({
 }));
 
 app.use("/api/auth",userRouter);
+app.use("/api/owner",ownerRouter);
 
 app.get("/",(req,res)=>{
     res.send("Hello from server");
