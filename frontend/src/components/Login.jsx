@@ -22,7 +22,7 @@ const Login = () => {
       const { data } = await http.post("/api/auth/login", values);
       console.log("RESPONSE", data);
         toast.success("Login successful");
-        return navigate("/app/user/dashboard");
+        return navigate("/app/user/access");
       
     } catch (err) {
       toast.error(err.response ? err.response.data.message : err.message);

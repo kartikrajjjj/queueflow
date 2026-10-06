@@ -35,7 +35,7 @@ const OwnerLogin = () => {
     <div className="flex">
       <div className="w-1/2 hidden md:flex items-center justify-center">
         <img
-          src="img2.jpg"
+          src="/img2.jpg"
           alt="Bank"
           className="w-4/5 object-contain "
         />
@@ -43,23 +43,17 @@ const OwnerLogin = () => {
       <div className="w-full md:w-1/2 flex items-center justify-center p-2 md:p-6 bg-white">
         <Card className="border border-black! w-full max-w-sm shadow-md">
           <h2 className="font-bold text-[#1616d3ad] text-2xl text-center mb-6 ">
-            Login
+            Owner Login
           </h2>
           <Form name="login-form" 
           layout="vertical"
           onFinish={onFinish}
           form={loginForm}
           >
-            <Item name="businessname" label="Business name:" rules={[{ required: true }]}>
-              <Input
-                prefix={<UserOutlined />}
-                placeholder="Enter your business name"
-              />
-            </Item>
             <Item
               name="ownerpassword"
               label="Password:"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: "Please enter your owner password" }]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
@@ -87,13 +81,7 @@ const OwnerLogin = () => {
             >
               Forgot Password
             </Link>
-            <Link
-              style={{ textDecoration: "underline" }}
-              to="/signup"
-              className="text-[#1616d3ad]! font-bold!"
-            >
-              Don't have an account
-            </Link>
+            
           </div>
         </Card>
       </div>

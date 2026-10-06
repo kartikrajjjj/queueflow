@@ -24,7 +24,7 @@ app.use("/api/auth",userRouter);
 app.use("/api/owner",ownerRouter);
 
 app.get("/",(req,res)=>{
-    res.send("Hello from server");
+    res.send("Queueflow App server active");
 })
 
 app.listen(PORT,()=>{

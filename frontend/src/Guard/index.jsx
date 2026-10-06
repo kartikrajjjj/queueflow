@@ -13,9 +13,11 @@ const Guard = ({ endpoint, role, children }) => {
       try {
         const { data } = await http.get(endpoint);
         sessionStorage.setItem("userInfo", JSON.stringify(data));
-        setUser(data.user?.role);
+        const userRole = data.user?.role;
+
+        setUser(userRole);
         setLoader(false);
-        setAuthorised(true);
+        setAuthorised(userRole === role);
       } catch (err) {
         setUser(null);
         setLoader(false);
@@ -27,11 +29,10 @@ const Guard = ({ endpoint, role, children }) => {
 
   if (loader) return <Loader />;
 
-  if(authorised ){
+  if (authorised) {
     return children;
-  }
-  else{
-    return <Navigate to="/" />
+  } else {
+    return <Navigate to="/" />;
   }
 };
 export default Guard;

@@ -8,7 +8,7 @@ import http from "../../utils/http";
 
 const { Item } = Form;
 
-const OwnerSignup = () => {
+const OwnerSignup = ({ onRegistered }) => {
   const [signupForm] = Form.useForm();
 
   const [formData, setFormData] = useState(null);
@@ -22,6 +22,7 @@ const OwnerSignup = () => {
       const { data } = await http.post("/api/owner/create", values);
       toast.success("Business registered successfully");
       setFormData(values);
+      onRegistered();
       
     } catch (err) {
       toast.error(err.response ? err.response.data.message : err.message);
