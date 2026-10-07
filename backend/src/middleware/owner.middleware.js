@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 export const verifyOwnerToken = (req, res, next) => {
-    console.log("OWNER MIDDLEWARE HIT");
   try {
     const token = req.cookies.ownerAuthToken;
     if (!token) {

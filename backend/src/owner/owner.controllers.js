@@ -58,7 +58,6 @@ export const ownerLogin = async (req, res) => {
 };
 
 export const checkOwner = async (req, res) => {
-  console.log("CHECK OWNER HIT");
   try {
     const owner = await OwnerModel.findOne({
       owner: req.user.id,
