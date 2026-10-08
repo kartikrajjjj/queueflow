@@ -71,3 +71,45 @@ export const checkOwner = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+export const addService = async (req, res)=>{
+  try{
+      const serviceName = req.body.serviceName;
+      const duration = req.body.duration;
+      if(!serviceName || duration < 1){
+        return res.status(400).json({
+          message: "Invalid service data"
+        });
+      }
+      
+    
+      const owner = await OwnerModel.findOne({owner: req.user.id});
+      if(!owner){
+        return res.status(404).json({
+          message: "Register business first"
+        });
+      }
+      const exists = owner.services.some((service)=>{
+        return service.serviceName.toLowerCase() === serviceName.toLowerCase();
+      });
+
+      if(exists ){
+        return res.status(400).json({
+          message: "This service alreday exists"
+        });
+      }
+      owner.services.push({
+        serviceName,
+        duration
+      });
+       await owner.save();
+
+      res.json({
+        message: "Service added successfully"
+      });
+       
+  }catch(err){
+    res.status(500).json({ message: err.message });
+  }
+}

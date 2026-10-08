@@ -6,7 +6,6 @@ const ownerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true,
-        trim: true,
         unique: true,
     },
     businessname:{
@@ -18,10 +17,24 @@ const ownerSchema = new Schema({
         type: String,
         required: true,
         trim: true 
-    }
+    },
+    services:[
+        {
+            serviceName:{
+                type: String,
+                required: true,
+                trim: true,
+            },
+            duration: {
+                type: Number,
+                required: true,
+            }
+        }
+    ]
 },{timestamps: true});
 
 ownerSchema.pre('save',async function (){
+    if (!this.isModified("ownerpassword")) return;
     const hashedOwnerPassword = await bcrypt.hash(this.ownerpassword.toString(),12);
     this.ownerpassword = hashedOwnerPassword;
 })

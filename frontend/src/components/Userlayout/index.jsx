@@ -30,9 +30,13 @@ const Userlayout = () => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleNavigate = (menu)=>{
-        navigate(menu.key);
-    }
+    const handleNavigate = (menu) => {
+    if (menu.key === "/app/user/owner") {
+        navigate("/app/user/ownerlogin");
+        return;
+      }
+      navigate(menu.key);
+  };
     
     const siderStyle={
         overflow: 'auto',
