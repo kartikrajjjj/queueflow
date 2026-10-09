@@ -11,12 +11,15 @@ import AccessSelection from "./components/AccessSelection/AccessSelection.jsx";
 import Signup from "./components/Signup.jsx";
 import HomePage from "./components/HomePage.jsx";
 
+import ForgotPassword from "./components/forgotPassword.jsx";
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/ownersignup" element={<OwnerSignup />} />
         
 
