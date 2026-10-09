@@ -86,3 +86,24 @@ export const sendEmail = async (req, res) => {
     });
   }
 };
+
+export const logout = async (req, res)=>{
+  try{
+    res.clearCookie("authToken", {
+    httpOnly: true,
+    secure: process.env.ENVIRONMENT !== "DEV",
+    sameSite: process.env.ENVIRONMENT === "DEV" ? "lax" : "none",
+    path: "/",
+  });
+  res.clearCookie("ownerAuthToken", {
+    httpOnly: true,
+    secure: process.env.ENVIRONMENT !== "DEV",
+    sameSite: process.env.ENVIRONMENT === "DEV" ? "lax" : "none",
+    path: "/",
+  });
+  res.status(200).json({message: "Logout successfully"});
+  }catch(err){
+    res.status(500).json({message: err.message || "Logout failed"});
+
+  }
+};

@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 export const verifyOwnerToken = (req, res, next) => {
   try {
+    console.log("verifyOwnerToken hit", req.cookies);
     const token = req.cookies.ownerAuthToken;
     if (!token) {
       return res.status(401).json({ message: "Owner authentication required" });

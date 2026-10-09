@@ -60,17 +60,17 @@ const Userlayout = () => {
     }
 
     //logout
-    // const logout =async ()=>{
-    //   try{
-    //     setLoading(true);
-    //     await http.get("/api/user/logout");
-    //     navigate("/");
-    //     setLoading(false);
-    //   }catch(err){
-    //     setLoading(false);
-    //     toast.error(err.response ? err.response.data.message : err.message)
-    //   }
-    // }
+    const logout =async ()=>{
+      try{
+        setLoading(true);
+        await http.post("/api/auth/logout");
+        navigate("/");
+        setLoading(false);
+      }catch(err){
+        setLoading(false);
+        toast.error(err.response ? err.response.data.message : err.message)
+      }
+    }
 
     const {
       token: {colorBgContainer, borderRadiusLG }
@@ -81,7 +81,7 @@ const Userlayout = () => {
       <Sider style={siderStyle} collapsible collapsed={open}>
         <div className="flex items-center justify-center my-4">
           <Image
-            src="/app-logo.png"
+            src="/icon.png"
             width={60}
             height={60}
             alt="logo"
@@ -101,11 +101,12 @@ const Userlayout = () => {
             onClick={()=>setOpen(!open)}
             icon={<MenuOutlined />}
             />
-            <Button
+            <Button 
             icon={<LogoutOutlined />}
-            // onClick={logout}
-            // loading={loading}
-            />
+            onClick={logout}
+            loading={loading} >
+              Logout App
+            </Button>
         </Header>
         <Content
         style={{

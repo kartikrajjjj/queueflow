@@ -18,6 +18,7 @@ const AccessSelection = () => {
       <Button
         className="bg-[#1616d3ad]! text-white! font-bold!
                   active:scale-95"
+        onClick={()=> navigate("/app/user/staff")}
       >
         Staff
       </Button>
