@@ -133,3 +133,12 @@ export const forgotPassword = async (req,res)=>{
     return res.status(500).json({message: err.message});
   }
 }
+
+export const verifyTokenController = async (req, res) =>{
+  try{
+    res.json("Verification successful");
+
+  }catch(err){
+    res.status(500).json({message: err.message});
+  }
+}

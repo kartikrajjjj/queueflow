@@ -31,7 +31,7 @@ const ForgotPassword = () => {
   const checkToken = async (tok) => {
     try {
       (await http.post(
-        "/api/user/verify-token",
+        "/api/auth/verify-token",
         {},
         {
           headers: {
@@ -61,7 +61,7 @@ const ForgotPassword = () => {
       if(values.password !==values.rePassword)
         return toast.warning("Passwords do not match");
       setLoading(true);
-      await http.put("/api/user/change-password", values, 
+      await http.put("/api/auth/change-password", values, 
         {
         headers: {
           Authorization: `Bearer ${params.get("token")}`
