@@ -141,4 +141,15 @@ export const verifyTokenController = async (req, res) =>{
   }catch(err){
     res.status(500).json({message: err.message});
   }
-}
+};
+
+export const changePassword = async (req, res) =>{
+  try{
+    const {password} = req.body;
+    const encrypted = await bcrypt.hash(password.toString(),12);
+    await UserModel.findByIdAndUpdate(req.user.id, {password: encrypted});
+    res.json({message: "Password updated successfully"});
+  }catch(err){
+    res.status(500).json({message: err.message });
+  }
+};
