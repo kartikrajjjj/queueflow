@@ -9,13 +9,16 @@ export const createBusiness = async (req, res) => {
       ownerpassword: req.body.ownerpassword,
       owner: req.user.id,
     };
+
     const owner = new OwnerModel(data);
     await owner.save();
+
     res.json(owner);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 const createOwnerToken = (owner) => {
   const payload = {
     ownerId: owner._id,
@@ -30,20 +33,34 @@ const createOwnerToken = (owner) => {
 export const ownerLogin = async (req, res) => {
   try {
     const { ownerpassword } = req.body;
+
     const owner = await OwnerModel.findOne({ owner: req.user.id });
+
     if (!owner) {
-      return res.status(404).json({ message: "Business not registered" });
+      return res.status(404).json({
+        message: "Business not registered",
+      });
     }
+
     if (!ownerpassword) {
       return res.status(400).json({
         message: "Owner password is required",
       });
     }
-    const isLogged = await bcrypt.compare(ownerpassword, owner.ownerpassword);
+
+    const isLogged = await bcrypt.compare(
+      ownerpassword,
+      owner.ownerpassword
+    );
+
     if (!isLogged) {
-      return res.status(401).json({ message: "Incorrect Password" });
+      return res.status(401).json({
+        message: "Incorrect password",
+      });
     }
+
     const token = createOwnerToken(owner);
+
     res.cookie("ownerAuthToken", token, {
       httpOnly: true,
       secure: process.env.ENVIRONMENT !== "DEV",
@@ -51,7 +68,10 @@ export const ownerLogin = async (req, res) => {
       path: "/",
       maxAge: 86400000,
     });
-    res.json({ message: "Owner login successful" });
+
+    res.json({
+      message: "Owner login successful",
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -62,8 +82,11 @@ export const checkOwner = async (req, res) => {
     const owner = await OwnerModel.findOne({
       owner: req.user.id,
     });
+
     if (!owner) {
-      return res.status(404).json({ message: "Business not registered" });
+      return res.status(404).json({
+        message: "Business not registered",
+      });
     }
 
     res.json({ registered: true });
@@ -72,44 +95,57 @@ export const checkOwner = async (req, res) => {
   }
 };
 
+export const addService = async (req, res) => {
+  try {
+    const serviceName =
+      typeof req.body.serviceName === "string"
+        ? req.body.serviceName.trim()
+        : "";
 
-export const addService = async (req, res)=>{
-  try{
-      const serviceName = req.body.serviceName;
-      const duration = req.body.duration;
-      if(!serviceName || duration < 1){
-        return res.status(400).json({
-          message: "Invalid service data"
-        });
-      }
-      
-    
-      const owner = await OwnerModel.findOne({owner: req.user.id});
-      if(!owner){
-        return res.status(404).json({
-          message: "Register business first"
-        });
-      }
-      const exists = owner.services.some((service)=>{
-        return service.serviceName.toLowerCase() === serviceName.toLowerCase();
-      });
+    const duration = Number(req.body.duration);
 
-      if(exists ){
-        return res.status(400).json({
-          message: "This service alreday exists"
-        });
-      }
-      owner.services.push({
-        serviceName,
-        duration
+    if (!serviceName || !Number.isFinite(duration) || duration < 1) {
+      return res.status(400).json({
+        message: "Please provide a valid service name and duration of at least 1 minute",
       });
-       await owner.save();
+    }
 
-      res.json({
-        message: "Service added successfully"
+    const owner = await OwnerModel.findOne({
+      owner: req.user.id,
+    });
+
+    if (!owner) {
+      return res.status(404).json({
+        message: "Register business first",
       });
-       
-  }catch(err){
-    res.status(500).json({ message: err.message });
+    }
+
+    const exists = owner.services.some((service) => {
+      return (
+        service.serviceName.trim().toLowerCase() ===
+        serviceName.toLowerCase()
+      );
+    });
+
+    if (exists) {
+      return res.status(400).json({
+        message: "This service already exists",
+      });
+    }
+
+    owner.services.push({
+      serviceName,
+      duration,
+    });
+
+    await owner.save();
+
+    return res.status(201).json({
+      message: "Service added successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
   }
-}
+};
