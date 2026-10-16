@@ -4,18 +4,50 @@ import jwt from "jsonwebtoken";
 
 export const createBusiness = async (req, res) => {
   try {
-    const data = {
-      businessname: req.body.businessname,
-      ownerpassword: req.body.ownerpassword,
-      owner: req.user.id,
-    };
+    const businessname =
+      typeof req.body.businessname === "string"
+        ? req.body.businessname.trim()
+        : "";
 
-    const owner = new OwnerModel(data);
+    const ownerpassword = req.body.ownerpassword;
+
+    if (!businessname) {
+      return res.status(400).json({
+        message: "Business name is required",
+      });
+    }
+
+    if (typeof ownerpassword !== "string" || !ownerpassword.trim()) {
+      return res.status(400).json({
+        message: "Owner password is required",
+      });
+    }
+
+    const existingBusiness = await OwnerModel.findOne({
+      owner: req.user.id,
+    });
+
+    if (existingBusiness) {
+      return res.status(409).json({
+        message: "You have already registered a business",
+      });
+    }
+
+    const owner = new OwnerModel({
+      businessname,
+      ownerpassword,
+      owner: req.user.id,
+    });
+
     await owner.save();
 
-    res.json(owner);
+    return res.status(201).json({
+      message: "Business registered successfully",
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      message: err.message,
+    });
   }
 };
 
