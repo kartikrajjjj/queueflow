@@ -138,7 +138,8 @@ export const addService = async (req, res) => {
 
     if (!serviceName || !Number.isFinite(duration) || duration < 1) {
       return res.status(400).json({
-        message: "Please provide a valid service name and duration of at least 1 minute",
+        message:
+          "Please provide a valid service name and duration of at least 1 minute",
       });
     }
 
@@ -174,6 +175,28 @@ export const addService = async (req, res) => {
 
     return res.status(201).json({
       message: "Service added successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+export const verifyOwnerSession = async (req, res) => {
+  try {
+    const owner = await OwnerModel.findById(req.owner.ownerId);
+
+    if (!owner) {
+      return res.status(401).json({
+        message: "Owner account not found",
+      });
+    }
+
+    return res.status(200).json({
+      authenticated: true,
+      ownerId: owner._id,
+      businessname: owner.businessname,
     });
   } catch (err) {
     return res.status(500).json({

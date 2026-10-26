@@ -105,7 +105,7 @@ const Userlayout = () => {
             icon={<LogoutOutlined />}
             onClick={logout}
             loading={loading} >
-              Logout App
+              Logout
             </Button>
         </Header>
         <Content

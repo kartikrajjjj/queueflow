@@ -18,11 +18,9 @@ const OwnerLogin = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      console.log("SENDING REQUEST", values);
       const { data } = await http.post("/api/owner/ownerlogin", values);
-      console.log("RESPONSE", data);
         toast.success("Login successful");
-        return navigate("/app/user/owner");
+        navigate("/app/owner");
       
     } catch (err) {
       toast.error(err.response ? err.response.data.message : err.message);
