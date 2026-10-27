@@ -16,6 +16,7 @@ import AccessSelection from "./components/AccessSelection/AccessSelection.jsx";
 import Signup from "./components/Signup.jsx";
 import HomePage from "./components/HomePage.jsx";
 import ForgotPassword from "./components/forgotPassword.jsx";
+import Services from "./components/Owner/services.jsx";
 
 function App() {
   return (
@@ -54,7 +55,7 @@ function App() {
 
           <Route
             path="services"
-            element={<div>Services page (in progress)</div>}
+            element={<Services />}
           />
 
           <Route

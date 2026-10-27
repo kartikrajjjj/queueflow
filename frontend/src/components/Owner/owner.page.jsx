@@ -1,45 +1,33 @@
 import { useEffect, useState } from "react";
 import http from "../../utils/http";
 import OwnerSignup from "./owner.signup";
-import OwnerDashboard from "./owner.dashboard";
-import { useNavigate } from "react-router-dom";
+import OwnerLogin from "./owner.login";
 
-const Ownerpage = ({ onRegistered }) => {
-  const navigate = useNavigate();
+const Ownerpage = () => {
   const [registered, setRegistered] = useState(null);
+
   useEffect(() => {
     const checkOwner = async () => {
       try {
         const { data } = await http.get("/api/owner/status");
         setRegistered(data.registered);
       } catch (err) {
-        if (err.response?.status === 401) {
-          navigate("/app/user/ownerlogin");
-          return;
-        }
-
-        console.log(err);
+        console.error("Failed to check business registration:", err);
       }
     };
+
     checkOwner();
   }, []);
 
   if (registered === null) {
-    return <div>Loading...</div>;
+    return <div>Checking business registration...</div>;
   }
+
   if (registered === false) {
-    return (
-      <OwnerSignup
-        onRegistered={() => {
-          console.log("CALLBACK RECEIVED");
-          setRegistered(true);
-        }}
-      />
-    );
+    return <OwnerSignup onRegistered={() => setRegistered(true)} />;
   }
 
-  console.log("REGISTERED STATE:", registered);
-
-  return <OwnerDashboard />;
+  return <OwnerLogin />;
 };
+
 export default Ownerpage;

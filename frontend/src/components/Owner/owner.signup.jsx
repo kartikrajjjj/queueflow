@@ -22,8 +22,8 @@ const OwnerSignup = ({ onRegistered }) => {
       const { data } = await http.post("/api/owner/create", values);
       toast.success("Business registered successfully");
       setFormData(values);
+      signupForm.resetFields();
       onRegistered();
-      
     } catch (err) {
       toast.error(err.response ? err.response.data.message : err.message);
       setFormData(null);
@@ -45,6 +45,10 @@ const OwnerSignup = ({ onRegistered }) => {
 
         <div className="w-full md:w-1/2">
           <Card>
+            <h2 className="text-2xl font-bold text-center text-slate-800 mb-6">
+              Register Your Business
+            </h2>
+
             <Form
               name="signup-form"
               layout="vertical"

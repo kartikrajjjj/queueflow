@@ -115,15 +115,13 @@ export const checkOwner = async (req, res) => {
       owner: req.user.id,
     });
 
-    if (!owner) {
-      return res.status(404).json({
-        message: "Business not registered",
-      });
-    }
-
-    res.json({ registered: true });
+    return res.status(200).json({
+      registered: Boolean(owner),
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({
+      message: "Failed to check business registration",
+    });
   }
 };
 
@@ -201,6 +199,59 @@ export const verifyOwnerSession = async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       message: err.message,
+    });
+  }
+};
+
+export const getServices = async (req, res)=>{
+  try{
+    const owner = await OwnerModel.findOne({
+      owner: req.user.id,
+    });
+    if(!owner){
+      return res.status(404).json({
+        message: "Business not found",
+      });
+    }
+    return res.status(200).json({
+      services: owner.services,
+    });
+  }catch(err){
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+export const deleteService = async (req, res)=>{
+  try{
+    const {serviceId} = req.params;
+
+    const owner = await OwnerModel.findOne({
+      owner: req.user.id,
+    });
+    if(!owner){
+      return res.status(404).json({
+        message: "Business not found",
+      });
+    }
+    const serviceIndex = owner.services.findIndex(
+      (service)=> service._id.toString() === serviceId
+    );
+    if(serviceIndex === -1){
+      return res.status(404).json({
+        message: "Service not found",
+      });
+    }
+    owner.services.splice(serviceIndex,1);
+    await owner.save();
+
+    return res.status(200).json({
+      message: "Service deleted successfully",
+    });
+  }catch(err){
+    return res.status(500).json({
+      message: "Failed to delete service",
     });
   }
 };
